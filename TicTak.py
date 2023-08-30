@@ -1,4 +1,4 @@
-from tkinter import*
+from tkinter import *
 from random import randint
 from pygame import mixer
 
@@ -6,11 +6,13 @@ from pygame import mixer
 #MAIN WINDOW DECLARATION::::::
 win=Tk()
 win.geometry("500x600")
-win.resizable(0,0)
+win.resizable(False,False)
 win.title("TIC TAK TOE")
 win.config(bg='#b5ae9a')
 #GLOBAL VARIABLES:::
-mixer.init() 
+mixer.init()
+mixer.music.load("mains\\bgm.mp3")
+mixer.music.play(-1)
 global MainGameFrame,NameWindowCouter,PlayerOneName,PlayerTwoName,PlayerOneNameText,PlayerTwoNameText,RandomNumOne,RandomNumTwo
 global FinalNum,FirstPlayerFinal,FirstPlayerLabel,RandomNumThree,GlobalCounterForXandO,Button1,Button2,Button3,Button4,Button5,Button6,Button7,Button8,Button9
 global RestTiles,MuteBgm,MusicCounter,matrix,songCounter
@@ -39,18 +41,17 @@ def FirstToStartGame():
 		FirstPlayerFinal= False
 	print(RandomNumOne,RandomNumTwo,RandomNumThree,RandomNumFour,(FinalNum%2))
 def FrameConfig():
-		if(FirstPlayerFinal):
+	if(FirstPlayerFinal):
 			if(PlayerOneNameText != 'PLAYER1'):
 				FirstPlayerLabel.config(text=f"{PlayerOneNameText} will make first move")
 			else:
 				FirstPlayerLabel.config(text="Player 1 will make first move")
-		else:
+	else:
 			if(PlayerTwoNameText != 'PLAYER2'):
 				FirstPlayerLabel.config(text=f"{PlayerTwoNameText} will make first move")
 			else:
 				FirstPlayerLabel.config(text="Player 2 will make first move")
-		mixer.music.load("mains\\bgm.mp3")
-		mixer.music.play(-1)
+       	
 def CreateLines():
 	Frame(MainGameFrame,width=2,bg='black',height=450).place(x=150,y=0)
 	Frame(MainGameFrame,width=2,bg='black',height=450).place(x=300,y=0)
@@ -62,7 +63,7 @@ def AddName():
 	if(NameWindowCouter<=0):
 		NameWindowCouter=NameWindowCouter+1
 		SetUserNameWindow=Tk()
-		SetUserNameWindow.resizable(0,0)
+		SetUserNameWindow.resizable(False,False)
 		SetUserNameWindow.config(bg='#b5ae9a')
 		SetUserNameWindow.geometry("300x150")
 		SetUserNameWindow.title("SET Name")
@@ -90,16 +91,16 @@ def AddName():
 def MuteUnMute():
 	global MusicCounter
 	if(MusicCounter==0):
-		 mixer.music.pause()
-		 MuteBgm.config(text="UNMUTE")
-		 MusicCounter=MusicCounter+1
+		mixer.music.pause()
+		MuteBgm.config(text="UNMUTE")
+		MusicCounter=MusicCounter+1
 	else:
-		 mixer.music.unpause()
-		 MuteBgm.config(text="MUTE")
-		 MusicCounter=MusicCounter-1
+		mixer.music.unpause()
+		MuteBgm.config(text="MUTE")
+		MusicCounter=MusicCounter-1
 #RESET BUTTON FUNCTION:
 def RestTilesFunction():
-	global matrix,GlobalCounterForXandO,songCounter
+	global matrix,GlobalCounterForXandO,songCounter,MusicCounter
 
 	Button1.config(text="",bg="white")
 	Button2.config(text="",bg="white")
@@ -125,6 +126,9 @@ def RestTilesFunction():
 		[4,5,6],
 		[4,5,6]]
 	songCounter=0
+	mixer.music.load("mains\\bgm.mp3")
+	mixer.music.play(-1);MuteBgm.config(text="MUTE")
+	MusicCounter=MusicCounter-1
 #check for 0 and 1 in the matix
 def check_zero(tiles):
   # Check vertical.
