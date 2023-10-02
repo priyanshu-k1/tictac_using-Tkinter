@@ -10,7 +10,7 @@ win.geometry("500x600")
 win.resizable(False, False)
 win.title("TIC TAK TOE")
 win.config(bg='#F2F7A1')
-# GLOBAL VARIABLES:::ss
+# GLOBAL VARIABLES:::
 win.iconbitmap("mains\\icon.ico")
 mixer.init()
 mixer.music.load("mains\\bgm.mp3")
@@ -86,6 +86,7 @@ def ScoreCounterUpdater():
         pass
     TotalCounterSpace.config(text=f"{sum1}:TOTAL:{sum2}")
 
+
 def FirstToStartGame():
     global FirstPlayerFinal, RandomNumOne, RandomNumTwo, RandomNumThree, GlobalCounterForXandO
     RandomNumOne = randint(1, 999)
@@ -101,26 +102,34 @@ def FirstToStartGame():
         FirstPlayerFinal = False
     print(RandomNumOne, RandomNumTwo, RandomNumThree,
           RandomNumFour, (FinalNum % 2))
+
+
 def changePlate(val):
-	if(val==0):
-		if (PlayerOneNameText != 'PLAYER1'):
-			FirstPlayerLabel.config(text=f"{PlayerOneNameText} will make  move")
-		else:
-			FirstPlayerLabel.config(text="Player 1 will make  move")
-	else:
-		if (PlayerTwoNameText != 'PLAYER2'):
-			FirstPlayerLabel.config( text=f"{PlayerTwoNameText} will make  move")
-		else:
-			FirstPlayerLabel.config(text="Player 2 will make  move")
-def FrameConfig():# indentation error
+    if (val == 0):
+        if (PlayerOneNameText != 'PLAYER1'):
+            FirstPlayerLabel.config(
+                text=f"{PlayerOneNameText} will make  move")
+        else:
+            FirstPlayerLabel.config(text="Player 1 will make  move")
+    else:
+        if (PlayerTwoNameText != 'PLAYER2'):
+            FirstPlayerLabel.config(
+                text=f"{PlayerTwoNameText} will make  move")
+        else:
+            FirstPlayerLabel.config(text="Player 2 will make  move")
+
+
+def FrameConfig():  # indentation error
     if (FirstPlayerFinal):
         if (PlayerOneNameText != 'PLAYER1'):
-            FirstPlayerLabel.config(text=f"{PlayerOneNameText} will make first move")
+            FirstPlayerLabel.config(
+                text=f"{PlayerOneNameText} will make first move")
         else:
             FirstPlayerLabel.config(text="Player 1 will make first move")
     else:
         if (PlayerTwoNameText != 'PLAYER2'):
-            FirstPlayerLabel.config( text=f"{PlayerTwoNameText} will make first move")
+            FirstPlayerLabel.config(
+                text=f"{PlayerTwoNameText} will make first move")
         else:
             FirstPlayerLabel.config(text="Player 2 will make first move")
 
@@ -168,6 +177,7 @@ def AddName():
     else:
         pass
 # MUTE THE BGM::
+
 def MuteUnMute():
     global MusicCounter, mutecounter
     if (MusicCounter == 0):
@@ -179,7 +189,6 @@ def MuteUnMute():
         MuteBgm.config(text="MUTE")
         MusicCounter = MusicCounter-1
 # RESET BUTTON FUNCTION:
-
 
 def RestTilesFunction():
     global matrix, GlobalCounterForXandO, songCounter, MusicCounter, PlayerTwoScoreMatrix, PlayerTwoScoreMatrix
@@ -239,6 +248,7 @@ def RestTilesFunction():
     if (MusicCounter == 0):
         mixer.music.play(-1)
 # check for 0 and 1 in the matix
+
 def check_zero(tiles):
     # Check vertical.
     for i in range(3):
@@ -257,7 +267,6 @@ def check_zero(tiles):
         return True
     return False
 
-
 def check_one(tiles):
     # Check vertical.
     for i in range(3):
@@ -275,7 +284,7 @@ def check_one(tiles):
     elif all(tiles[i][2-i] == 1 for i in range(3)):
         return True
     return False
-
+#Check if game is finshed or not::::
 
 def GameOver():
     global songCounter, AfterId
@@ -311,8 +320,7 @@ def GameOver():
     except:
         pass
     FirstPlayerLabel.after(10, GameOver)
-# ON BUTTON PRESS FUNCTION
-
+#Functions to trigger tile press
 
 def ButtonOne():
     global GlobalCounterForXandO, tiles1, PreventRepetation
@@ -328,6 +336,7 @@ def ButtonOne():
         Button1.config(text="O", bg="red")
         Button1["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+
 
 def ButtonTwo():
     global GlobalCounterForXandO, tiles2, PreventRepetation
@@ -360,6 +369,7 @@ def ButtonThree():
         Button3["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
 
+
 def ButtonFour():
     global GlobalCounterForXandO, tiles4, PreventRepetation
     PreventRepetation.remove(4)
@@ -374,6 +384,7 @@ def ButtonFour():
         Button4.config(text="O", bg="red")
         Button4["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+
 
 def ButtonFive():
     global GlobalCounterForXandO, tiles5, PreventRepetation
@@ -454,7 +465,7 @@ def ButtonNine():
         Button9["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
 
-
+#To activate AI mode 
 def AgainstAiFunc():
     global PlayerTwoNameText, NameLabel2, GlobalCounterForXandO, AiMode
     if (AiMode == 0):
@@ -471,8 +482,8 @@ def AgainstAiFunc():
     else:
         AiMode = 0
         AgainstAi.config(text="Against A.I", bg="light green")
-
-
+     
+#Function to check weather AI have to make a move   
 def IsAiHaveToMove():
     global FirstPlayerLabel, GlobalCounterForXandO, AfterId
     try:
@@ -491,8 +502,7 @@ def IsAiHaveToMove():
     except Exception as e:
         print(f"Error:{e}")
     AfterId = FirstPlayerLabel.after(10, IsAiHaveToMove)
-
-
+#On tile press 
 def MakeAiMove(num):
     if (num == 1):
         ButtonOne()
@@ -513,168 +523,135 @@ def MakeAiMove(num):
     elif (num == 9):
         ButtonNine()
     else:
-    	print(f"input error in MakeAiMove function\nInput recived :{num}")
-    print(PreventRepetation)
+        print(f"input error in MakeAiMove function\nInput recived :{num}")
+        
+#Funciton to check weather the AI is winning and to block opponent moves:
+
 def checkISwinning():
-    global listcounter
-    # 1st row
-    if ((matrix[0][0] == 1 and matrix[0][1] == 1)  and (3 in PreventRepetation)):
-        print("(0,2)")
-        try:
-            MakeAiMove(3)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[0][2] == 1 and matrix[0][1] == 1)   and ( 1 in PreventRepetation)):
-        print("(0,0)")
+    if ((matrix[0][0] == 0 and matrix[0][1] == 0) and 3 in PreventRepetation):
+        MakeAiMove(3)
+    elif((matrix[0][2] == 0 and matrix[0][1] == 0) and 1 in PreventRepetation):
         MakeAiMove(1)
-    elif ((matrix[0][0] == 1 and matrix[0][2] == 1) and ( 2in PreventRepetation)):
-        print("(0,1)")
-        try:
-            MakeAiMove(2)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    # 2nd row
-    elif ((matrix[1][0] == 1 and matrix[1][1] == 1)and ( 6 in PreventRepetation)):
-        print("(1,2)")
-        try:
-            MakeAiMove(6)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[1][2] == 1 and matrix[1][1] == 1) and (4 in PreventRepetation)):
-        print("(1,0)")
-        try:
-            MakeAiMove(4)
-        except Exception as e:
-        	MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[1][0] == 1 and matrix[1][2] == 1) and (5 in PreventRepetation)):
-        print("(1,1)")
-        try:
-            MakeAiMove(5)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    # 3rd  row
-    elif ((matrix[2][0] == 1 and matrix[2][1] == 1) and (9 in PreventRepetation)):
-        print("(2,2)")
-        try:
-            MakeAiMove(9)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][2] == 1 and matrix[2][1] == 1)and (7 in PreventRepetation)):
-        print("(2,0)")
-        try:
-            MakeAiMove(7)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][0] == 1 and matrix[2][2] == 1) and (8 in PreventRepetation)):
-        print("(2,1)")
-        try:
-            MakeAiMove(8)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    # colomn one
-    elif ((matrix[0][0] == 1 and matrix[1][0] == 1) and (7 in PreventRepetation)):
-        print("(2,0)")
-        try:
-            MakeAiMove(7)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][0] == 1 and matrix[1][0] == 1) and (1 in PreventRepetation)):
-        print("(0,0)")
-        try:
-            MakeAiMove(1)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][0] == 1 and matrix[0][0] == 1)and (4 in PreventRepetation)):
-        print("(1,0)")
-        try:
-            MakeAiMove(4)
-        except Exception as e:
-        	MakeAiMove(random.choice(PreventRepetation))
-    # colomn two
-    elif ((matrix[0][1] == 1 and matrix[1][1] == 1) and (8 in PreventRepetation)):
-        print("(2,1)")
-        try:
-            MakeAiMove(8)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][1] == 1 and matrix[1][1] == 1)and (2 in PreventRepetation)):
-        print("(0,1)")
-        try:
-            MakeAiMove(2)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][1] == 1 and matrix[0][1] == 1) and (5 in PreventRepetation)):
-        print("(1,1)")
-        try:
-            MakeAiMove(5)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    # colomn three
-    elif ((matrix[0][2] == 1 and matrix[1][2] == 1)and (9 in PreventRepetation)):
-        print("(2,2)")
-        try:
-            MakeAiMove(9)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][2] == 1 and matrix[1][2] == 1) and (3 in PreventRepetation)):
-        print("(0,2)")
-        try:
-            MakeAiMove(3)
-        except Exception as e:
-        	print(e)
-        	MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][2] == 1 and matrix[0][2] == 1)and (6 in PreventRepetation)):
-        print("(1,2)")
-        try:
-            MakeAiMove(6)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    # Diagonal
-    elif ((matrix[0][0] == 1 and matrix[1][1] == 1)and (9 in PreventRepetation)):
-        print("(2,2)")
-        try:
-            MakeAiMove(9)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[0][0] == 1 and matrix[2][2] == 1)and (5 in PreventRepetation)):
-        print("(1,1)")
-        try:
-            MakeAiMove(5)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[1][1] == 1 and matrix[2][2] == 1) and (1 in PreventRepetation)):
-        print("(0,0)")
-        try:
-            MakeAiMove(1)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[0][2] == 1 and matrix[1][1] == 1)and (7 in PreventRepetation)):
-        print("(2,1)")
-        try:
-            MakeAiMove(7)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[0][2] == 1 and matrix[2][1] == 1) and (5 in PreventRepetation)):
-        print("(1,1)")
-        try:
-            MakeAiMove(5)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
-    elif ((matrix[2][0] == 1 and matrix[1][1] == 1) and (3 in PreventRepetation)):
-        print("(0,2)")
-        try:
-            MakeAiMove(3)
-        except:
-            MakeAiMove(random.choice(PreventRepetation))
+    elif((matrix[0][0] == 0 and matrix[0][2] == 0) and 2 in PreventRepetation):
+          MakeAiMove(2)
+    elif((matrix[1][1] == 0 and matrix[1][0] == 0)and 6 in PreventRepetation):
+          MakeAiMove(6)
+    elif((matrix[1][2] == 0 and matrix[1][1] == 0)and 4 in PreventRepetation):
+          MakeAiMove(4)
+    elif((matrix[1][0] == 0 and matrix[1][2] == 0)and 5 in PreventRepetation):
+          MakeAiMove(5)
+    elif((matrix[2][0] == 0 and matrix[2][1] == 0)and 9 in PreventRepetation):
+          MakeAiMove(9)
+    elif((matrix[2][2] == 0 and matrix[2][1] == 0)and 7 in PreventRepetation):
+          MakeAiMove(7)
+    elif((matrix[2][0] == 0 and matrix[2][2] == 0)and 8 in PreventRepetation):
+          MakeAiMove(8)
+    elif((matrix[0][0] == 0 and matrix[1][0] == 0)and 7 in PreventRepetation):
+          MakeAiMove(7)
+    elif((matrix[2][0] == 0 and matrix[1][0] == 0)and 1 in PreventRepetation):
+          MakeAiMove(1)
+    elif((matrix[2][0] == 0 and matrix[0][0] == 0)and 4 in PreventRepetation):
+          MakeAiMove(4)
+    elif((matrix[0][1] == 0 and matrix[1][1] == 0)and 8 in PreventRepetation):
+          MakeAiMove(8)
+    elif((matrix[2][1] == 0 and matrix[1][1] == 0)and 2 in PreventRepetation):
+          MakeAiMove(2)
+    elif((matrix[2][1] == 0 and matrix[0][1] == 0)and 5 in PreventRepetation):
+          MakeAiMove(5)
+    elif((matrix[0][2] == 0 and matrix[1][2] == 0)and 9 in PreventRepetation):
+          MakeAiMove(9)
+    elif((matrix[2][2] == 0 and matrix[1][2] == 0)and 3 in PreventRepetation):
+          MakeAiMove(3)
+    elif((matrix[2][2] == 0 and matrix[0][2] == 0)and 6 in PreventRepetation):
+          MakeAiMove(6)
+    elif((matrix[0][0] == 0 and matrix[1][1] == 0)and 9 in PreventRepetation):
+          MakeAiMove(9)
+    elif((matrix[0][0] == 0 and matrix[2][2] == 0)and 5 in PreventRepetation):
+          MakeAiMove(5)
+    elif((matrix[1][1] == 0 and matrix[2][2] == 0)and 1 in PreventRepetation):
+          MakeAiMove(1)
+    elif((matrix[0][2] == 0 and matrix[1][1] == 0)and 7 in PreventRepetation):
+          MakeAiMove(7)
+    elif((matrix[0][2] == 0 and matrix[2][0] == 0)and 5 in PreventRepetation):
+          MakeAiMove(5)
+    elif((matrix[2][0] == 0 and matrix[1][1] == 0)and 3 in PreventRepetation):
+          MakeAiMove(3)
     else:
-        print("Gets into the else part!")
-        MakeAiMove(random.choice(PreventRepetation))
-        for i in matrix:
-        	print(matrix)
-        	break
-            
-
-
+        if((matrix[0][0] == 1 and matrix[0][1] == 1)  and (3 in PreventRepetation)):
+            print("(0,2)")
+            MakeAiMove(3)
+        elif ((matrix[0][2] == 1 and matrix[0][1] == 1)   and ( 1 in PreventRepetation)):
+            print("(0,0)")
+            MakeAiMove(1)
+        elif ((matrix[0][0] == 1 and matrix[0][2] == 1) and ( 2 in PreventRepetation)):
+            print("(0,1)")
+            MakeAiMove(2)
+        elif ((matrix[1][0] == 1 and matrix[1][1] == 1)and ( 6 in PreventRepetation)):
+            print("(1,2)")
+            MakeAiMove(6)
+        elif ((matrix[1][2] == 1 and matrix[1][1] == 1) and (4 in PreventRepetation)):
+            print("(1,0)")
+            MakeAiMove(4)
+        elif ((matrix[1][0] == 1 and matrix[1][2] == 1) and (5 in PreventRepetation)):
+            print("(1,1)")
+            MakeAiMove(5)
+        elif ((matrix[2][0] == 1 and matrix[2][1] == 1) and (9 in PreventRepetation)):
+            print("(2,2)")
+            MakeAiMove(9)
+        elif ((matrix[2][2] == 1 and matrix[2][1] == 1)and (7 in PreventRepetation)):
+            print("(2,0)")
+            MakeAiMove(7)
+        elif ((matrix[2][0] == 1 and matrix[2][2] == 1) and (8 in PreventRepetation)):
+            print("(2,1)")
+            MakeAiMove(8)
+        elif ((matrix[0][0] == 1 and matrix[1][0] == 1) and (7 in PreventRepetation)):
+            print("(2,0)")
+            MakeAiMove(7)
+        elif ((matrix[2][0] == 1 and matrix[1][0] == 1) and (1 in PreventRepetation)):
+            print("(0,0)")
+            MakeAiMove(1)
+        elif((matrix[2][0] == 1 and matrix[0][0] == 1)and (4 in PreventRepetation)):
+            print("(1,0)")
+            MakeAiMove(4)
+        elif ((matrix[0][1] == 1 and matrix[1][1] == 1) and (8 in PreventRepetation)):
+            print("(2,1)")
+            MakeAiMove(8)
+        elif ((matrix[2][1] == 1 and matrix[1][1] == 1)and (2 in PreventRepetation)):
+            print("(0,1)")
+            MakeAiMove(2)
+        elif ((matrix[2][1] == 1 and matrix[0][1] == 1) and (5 in PreventRepetation)):
+            print("(1,1)")
+            MakeAiMove(5)
+        elif ((matrix[0][2] == 1 and matrix[1][2] == 1)and (9 in PreventRepetation)):
+            print("(2,2)")
+            MakeAiMove(9)
+        elif ((matrix[2][2] == 1 and matrix[1][2] == 1) and (3 in PreventRepetation)):
+            print("(0,2)")
+            MakeAiMove(3)
+        elif ((matrix[2][2] == 1 and matrix[0][2] == 1)and (6 in PreventRepetation)):
+            print("(1,2)")
+            MakeAiMove(6)
+        elif ((matrix[0][0] == 1 and matrix[1][1] == 1)and (9 in PreventRepetation)):
+            print("(2,2)")
+            MakeAiMove(9)
+        elif ((matrix[0][0] == 1 and matrix[2][2] == 1)and (5 in PreventRepetation)):
+            print("(1,1)")
+            MakeAiMove(5)
+        elif((matrix[1][1] == 1 and matrix[2][2] == 1) and (1 in PreventRepetation)):
+            print("(0,0)")
+            MakeAiMove(1)
+        elif ((matrix[0][2] == 1 and matrix[1][1] == 1)and (7 in PreventRepetation)):
+            print("(2,1)")
+            MakeAiMove(7)
+        elif ((matrix[0][2] == 1 and matrix[2][0] == 1) and (5 in PreventRepetation)):
+            print("(1,1)")
+            MakeAiMove(5)
+        elif ((matrix[2][0] == 1 and matrix[1][1] == 1) and (3 in PreventRepetation)):
+            print("(0,2)")
+            MakeAiMove(3)
+        else:
+            MakeAiMove(random.choice(PreventRepetation))
+      
 # PLAYER'S DETAIL BAR::::::::::
 PlayerNameFrame = Frame(win, bg='red', height=80, width=500)
 PlayerNameFrame.pack(fill='y', pady=10)
@@ -705,40 +682,43 @@ MuteBgm.place(x=350, y=550)
 
 
 # TILES BUTTON
-Button1 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button1 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonOne)
 Button1.place(x=0, y=0)
-Button2 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button2 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonTwo)
 Button2.place(x=150, y=0)
-Button3 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button3 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonThree)
 Button3.place(x=300, y=0)
 
-Button4 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button4 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonFour)
 Button4.place(x=0, y=113)
-Button5 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button5 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonFive)
 Button5.place(x=150, y=113)
-Button6 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button6 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonSix)
 Button6.place(x=300, y=113)
 
-Button7 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button7 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonSeven)
 Button7.place(x=0, y=225)
-Button8 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button8 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonEight)
 Button8.place(x=150, y=225)
-Button9 = Button(MainGameFrame, bg='white', width=5, height=1,
+Button9 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonNine)
 Button9.place(x=300, y=225)
-#Check if tiles are full
+# Check if tiles are full
+
+
 def CheckTilesAreFull():
-	if(len(PreventRepetation)==0):
-		RestTilesFunction()
-	MainGameFrame.after(10,CheckTilesAreFull)
+    if (len(PreventRepetation) == 0):
+        RestTilesFunction()
+    MainGameFrame.after(10, CheckTilesAreFull)
+
 
 # MAIN FUNCTION
 FirstToStartGame()
