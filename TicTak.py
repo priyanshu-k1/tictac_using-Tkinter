@@ -119,7 +119,7 @@ def changePlate(val):
             FirstPlayerLabel.config(text="Player 2 will make  move")
 
 
-def FrameConfig():  # indentation error
+def FrameConfig(): 
     if (FirstPlayerFinal):
         if (PlayerOneNameText != 'PLAYER1'):
             FirstPlayerLabel.config(
@@ -192,22 +192,22 @@ def MuteUnMute():
 
 def RestTilesFunction():
     global matrix, GlobalCounterForXandO, songCounter, MusicCounter, PlayerTwoScoreMatrix, PlayerTwoScoreMatrix
-    global tileslist, PreventRepetation
+    global  PreventRepetation
     try:
         ScoreScreen1.config(state=NORMAL)
         ScoreScreen2.config(state=NORMAL)
     except:
         pass
     if (check_zero(matrix)):
-        PlayerTwoScoreMatrix.insert(len(PlayerTwoScoreMatrix), 1)
         try:
+            PlayerTwoScoreMatrix.insert(len(PlayerTwoScoreMatrix), 1)
             ScoreScreen2.insert(END, f"\n{1}")
             ScoreScreen1.insert(END, f"\n{0}")
         except:
             pass
     elif (check_one(matrix)):
-        PlayerOneScoreMatrix.insert(len(PlayerTwoScoreMatrix), 1)
         try:
+            PlayerOneScoreMatrix.insert(len(PlayerTwoScoreMatrix), 1)
             ScoreScreen1.insert(END, f"\n{1}")
             ScoreScreen2.insert(END, f"\n{0}")
         except:
@@ -711,12 +711,17 @@ Button8.place(x=150, y=225)
 Button9 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
                  relief='flat', font='times 45', command=ButtonNine)
 Button9.place(x=300, y=225)
+
+
 # Check if tiles are full
-
-
 def CheckTilesAreFull():
-    if (len(PreventRepetation) == 0):
-        RestTilesFunction()
+    try:
+        if (len(PreventRepetation) == 0):
+            FirstPlayerLabel.config(text="Reseting the tiles in 2 seconds.....")
+            sleep(2)
+            RestTilesFunction()
+    except Exception as e:
+        print(f"Error :{e}")
     MainGameFrame.after(10, CheckTilesAreFull)
 
 
@@ -726,5 +731,5 @@ CreateLines()
 FrameConfig()
 GameOver()
 IsAiHaveToMove()
-# CheckTilesAreFull()
+CheckTilesAreFull()
 win.mainloop()
