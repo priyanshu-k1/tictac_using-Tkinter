@@ -718,11 +718,10 @@ def CheckTilesAreFull():
     try:
         if (len(PreventRepetation) == 0):
             FirstPlayerLabel.config(text="Reseting the tiles in 2 seconds.....")
-            sleep(2)
             RestTilesFunction()
     except Exception as e:
         print(f"Error :{e}")
-    MainGameFrame.after(10, CheckTilesAreFull)
+    MainGameFrame.after(300, CheckTilesAreFull)
 
 
 # MAIN FUNCTION
