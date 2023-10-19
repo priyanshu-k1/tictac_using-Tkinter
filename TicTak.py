@@ -162,12 +162,14 @@ def AddName():
 
         def submit():
             global NameWindowCouter, PlayerOneNameText, PlayerTwoNameText
-            PlayerOneNameText = f"{UserNameEntry.get()}"
-            PlayerTwoNameText = f"{UserName2Entry.get()}"
-            PlayerOneName.config(text=f"{UserNameEntry.get()}")
-            PlayerTwoName.config(text=f"{UserName2Entry.get()}")
-            NameLabel1.config(text=f"{UserNameEntry.get()}")
-            NameLabel2.config(text=f"{UserName2Entry.get()}")
+            if(UserNameEntry.get()!=""):
+                PlayerOneNameText = f"{UserNameEntry.get()}"
+                NameLabel1.config(text=f"{UserNameEntry.get()}")
+                PlayerOneName.config(text=f"{UserNameEntry.get()}")
+            if(UserName2Entry.get()!=""):
+                PlayerTwoNameText = f"{UserName2Entry.get()}"
+                PlayerTwoName.config(text=f"{UserName2Entry.get()}")
+                NameLabel2.config(text=f"{UserName2Entry.get()}")
             NameWindowCouter = NameWindowCouter-1
             FrameConfig()
             SetUserNameWindow.destroy()
@@ -468,6 +470,7 @@ def ButtonNine():
 #To activate AI mode 
 def AgainstAiFunc():
     global PlayerTwoNameText, NameLabel2, GlobalCounterForXandO, AiMode
+    RestTilesFunction()
     if (AiMode == 0):
         showinfo("Message", """We are working hard to improve the AI, and we are confident that it will become more accurate and reliable over time. In the meantime, please let us know if you encounter any problems. We are always happy to help.\n Thank you""")
         AiMode = 1
@@ -481,6 +484,12 @@ def AgainstAiFunc():
         IsAiHaveToMove()
     else:
         AiMode = 0
+        PlayerTwoNameText='PLAYER 2'
+        try:
+            NameLabel2.config(text=PlayerTwoNameText)
+        except:
+            pass
+        PlayerTwoName.config(text=PlayerTwoNameText)
         AgainstAi.config(text="Against A.I", bg="light green")
      
 #Function to check weather AI have to make a move   
