@@ -13,14 +13,14 @@ To play the game, clone the repository and run the `TicTac.py` file. The game wi
 I hope you enjoy playing this Tic Tac Toe game!
 
 Requirements:
-* Python modules-Tkinter,Pygame,Random,Sleep.
-
+* Python modules-Tkinter,Pygame,Random,Sleep(time).
 Additional features:
-* It comes with a AI mode to compete against the computer.
+* It comes with a AI mode , for  competing against the computer.
 * You can make the game ours by giving the player your name.
 
 Drawbacks:
 * The AI mode is not accurate it may result in some inaccurate moves.
 * Some time the AI take lot of time to make move or even fails to make move.
 * The colour scheme of the game is not final yet ,it's still under devlopement.
+
 I hope this helps!
