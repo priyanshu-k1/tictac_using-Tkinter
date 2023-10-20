@@ -9,7 +9,7 @@ win = Tk()
 win.geometry("500x600")
 win.resizable(False, False)
 win.title("TIC TAK TOE")
-win.config(bg='#F2F7A1')
+win.config(bg='#f99417')
 # GLOBAL VARIABLES:::
 win.iconbitmap("mains\\icon.ico")
 mixer.init()
@@ -474,7 +474,7 @@ def AgainstAiFunc():
     if (AiMode == 0):
         showinfo("Message", """We are working hard to improve the AI, and we are confident that it will become more accurate and reliable over time. In the meantime, please let us know if you encounter any problems. We are always happy to help.\n Thank you""")
         AiMode = 1
-        AgainstAi.config(text="Against human", bg="pink")
+        AgainstAi.config(text="Against human", bg="light green")
         PlayerTwoNameText = 'A.N.S.H.U'
         try:
             NameLabel2.config(text=PlayerTwoNameText)
@@ -665,12 +665,12 @@ def checkISwinning():
 PlayerNameFrame = Frame(win, bg='red', height=80, width=500)
 PlayerNameFrame.pack(fill='y', pady=10)
 
-PlayerOneName = Button(PlayerNameFrame, text='PLAYER 1',
-                       height=5, width=40, command=AddName)
+PlayerOneName = Button(PlayerNameFrame, text='PLAYER 1',bg="#ffffff",
+                       height=5, width=40, command=AddName,cursor="")
 PlayerOneName.place(y=0)
 
 PlayerTwoName = Button(PlayerNameFrame, text='PLAYER 2',
-                       height=5, width=40, command=AddName)
+                       height=5, width=40, command=AddName,bg="#ffffff")
 PlayerTwoName.place(x=250)
 
 
@@ -680,11 +680,11 @@ FirstPlayerLabel.place(y=95)
 MainGameFrame = Frame(win, bg='white', width=450, height=900)
 MainGameFrame.pack(pady=80)
 # MUTE & REST BUTTON
-RestTiles = Button(win, text="REST", bg="Red",
+RestTiles = Button(win, text="New Game", bg="Red",
                    width=15, command=RestTilesFunction)
 RestTiles.place(x=40, y=550)
 AgainstAi = Button(win, text="Against A.I", width=15,
-                   command=AgainstAiFunc, bg='light green')
+                   command=AgainstAiFunc, bg='pink')
 AgainstAi.place(x=200, y=550)
 MuteBgm = Button(win, text="MUTE", bg="#42f5b3", width=15, command=MuteUnMute)
 MuteBgm.place(x=350, y=550)

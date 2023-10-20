@@ -1,0 +1,24 @@
+HOW TO PLAY:
+
+*To rename the "player 1" and "player 2":
+    
+    >Simply click on "player 1" or "player 2".
+    >A window will appear asking for players names.
+    >After enterning the names of the players click on submit button.
+
+*To restart the game:
+    >Click on "New game" button in the main window.
+
+*To enable A.I mode:
+    >Click on "Against A.I" button in the main window.
+
+*To disable A.I mode:
+    >Click on "Against Human" button in the main window.
+
+*To Mute the game:
+    >Click on "Mute" button in the main window.
+
+*TO unmute the game:
+    >Click on "Unmute" button in the main window.
+     
+Hope this helps.
