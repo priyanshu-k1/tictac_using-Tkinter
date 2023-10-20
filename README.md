@@ -1,7 +1,7 @@
 This repository contains a Python Tkinter program for a Tic Tac Toe game. The game is played by two players, who take turns marking the spaces in a 3x3 grid. The first player to get three of their marks in a row, column, or diagonal wins the game.
 <a href="https://drive.google.com/file/d/1hs7QHcsgOku2WQ_GI9UvCDF1gezXZzKA/view?usp=share_link"> click here to download the Exe</a >
+<br>
 The program uses the following Python modules:
-
 * Tkinter: This module is used to create the graphical user interface (GUI) for the game.
 * random: This module is used to randomly select the first player and other works.
 * pygame for playing music in the backgound
