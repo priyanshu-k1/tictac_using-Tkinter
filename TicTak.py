@@ -38,55 +38,11 @@ matrix = [
     [4, 5, 6],
     [4, 5, 6]
 ]
-PlayerOneScoreMatrix = []
-PlayerTwoScoreMatrix = []
+PlayerOneScoreMatrix = 0
+PlayerTwoScoreMatrix = 0
 if (MusicCounter == 0):
     mixer.music.play(-1)
 # FUNCTION::::::
-
-SecondWin = Toplevel(win)
-SecondWin.iconbitmap("mains\\icon.ico")
-SecondWin.title("SCORE CARD WINDOW ")
-SecondWin.geometry('300x500')
-SecondWin.resizable(False, False)
-NameFrame = Frame(SecondWin, bg='red', height=70, width=300)
-NameFrame.place(x=0, y=5)
-
-NameLabel1 = Label(NameFrame, text="Player 1",
-                   bg='light blue', height=5, width=21)
-NameLabel1.place(x=0)
-
-NameLabel2 = Label(NameFrame, text="Player 2",
-                   bg='light green', height=5, width=21)
-NameLabel2.place(x=150)
-
-ScoreScreen1 = Text(SecondWin, font="times 35", height=23, width=6)
-ScoreScreen1.place(y=77, x=2)
-ScoreScreen1.config(state=DISABLED)
-
-ScoreScreen2 = Text(SecondWin, font="times 35", height=23, width=6)
-ScoreScreen2.place(y=77, x=151)
-ScoreScreen2.config(state=DISABLED)
-
-TotalCounterSpace = Label(SecondWin, bg='sky blue',
-                          text="0:TOTAL:0 ", font='times 15', height=2, width=27)
-TotalCounterSpace.place(y=449)
-
-
-def ScoreCounterUpdater():
-    global sum1, sum2
-    sum1 = 0
-    sum2 = 0
-    try:
-        for i in PlayerOneScoreMatrix:
-            sum1 = sum1+i
-        for j in PlayerTwoScoreMatrix:
-            sum2 = sum2+j
-    except:
-        pass
-    TotalCounterSpace.config(text=f"{sum1}:TOTAL:{sum2}")
-
-
 def FirstToStartGame():
     global FirstPlayerFinal, RandomNumOne, RandomNumTwo, RandomNumThree, GlobalCounterForXandO
     RandomNumOne = randint(1, 999)
@@ -159,17 +115,14 @@ def AddName():
         UserName2Entry = Entry(SetUserNameWindow, width=45)
         UserName2Entry.place(x=10, y=80, height=30)
         # Sub functions
-
         def submit():
             global NameWindowCouter, PlayerOneNameText, PlayerTwoNameText
             if(UserNameEntry.get()!=""):
                 PlayerOneNameText = f"{UserNameEntry.get()}"
-                NameLabel1.config(text=f"{UserNameEntry.get()}")
-                PlayerOneName.config(text=f"{UserNameEntry.get()}")
+                PlayerOneName.config(text=f"{PlayerOneNameText}  [{PlayerOneScoreMatrix}]")
             if(UserName2Entry.get()!=""):
                 PlayerTwoNameText = f"{UserName2Entry.get()}"
-                PlayerTwoName.config(text=f"{UserName2Entry.get()}")
-                NameLabel2.config(text=f"{UserName2Entry.get()}")
+                PlayerTwoName.config(text=f"{PlayerTwoNameText}  [{PlayerTwoScoreMatrix}]")
             NameWindowCouter = NameWindowCouter-1
             FrameConfig()
             SetUserNameWindow.destroy()
@@ -193,35 +146,14 @@ def MuteUnMute():
 # RESET BUTTON FUNCTION:
 
 def RestTilesFunction():
-    global matrix, GlobalCounterForXandO, songCounter, MusicCounter, PlayerTwoScoreMatrix, PlayerTwoScoreMatrix
+    global matrix, GlobalCounterForXandO, songCounter, MusicCounter, PlayerTwoScoreMatrix, PlayerOneScoreMatrix,PlayerOneName
     global  PreventRepetation
-    try:
-        ScoreScreen1.config(state=NORMAL)
-        ScoreScreen2.config(state=NORMAL)
-    except:
-        pass
     if (check_zero(matrix)):
-        try:
-            PlayerTwoScoreMatrix.insert(len(PlayerTwoScoreMatrix), 1)
-            ScoreScreen2.insert(END, f"\n{1}")
-            ScoreScreen1.insert(END, f"\n{0}")
-        except:
-            pass
+            PlayerTwoScoreMatrix=PlayerTwoScoreMatrix+1
+            PlayerTwoName.config(text=f"{PlayerTwoNameText}  [{PlayerTwoScoreMatrix}]")
     elif (check_one(matrix)):
-        try:
-            PlayerOneScoreMatrix.insert(len(PlayerTwoScoreMatrix), 1)
-            ScoreScreen1.insert(END, f"\n{1}")
-            ScoreScreen2.insert(END, f"\n{0}")
-        except:
-            pass
-    else:
-        pass
-    try:
-        ScoreScreen1.config(state=DISABLED)
-        ScoreScreen2.config(state=DISABLED)
-        ScoreCounterUpdater()
-    except:
-        pass
+            PlayerOneScoreMatrix = PlayerOneScoreMatrix+1
+            PlayerOneName.config(text=f"{PlayerOneNameText}  [{PlayerOneScoreMatrix}]")
     IsAiHaveToMove()
     Button1.config(text="", bg="white")
     Button2.config(text="", bg="white")
@@ -248,7 +180,10 @@ def RestTilesFunction():
     songCounter = 0
     mixer.music.load("mains\\bgm.mp3")
     if (MusicCounter == 0):
-        mixer.music.play(-1)
+        try:
+            mixer.music.play(-1)
+        except:
+            pass
 # check for 0 and 1 in the matix
 
 def check_zero(tiles):
@@ -256,19 +191,16 @@ def check_zero(tiles):
     for i in range(3):
         if all(tiles[i][j] == 0 for j in range(3)):
             return True
-
     # Check horizontal.
     for i in range(3):
         if all(tiles[j][i] == 0 for j in range(3)):
             return True
-
     # Check diagonal.
     if all(tiles[i][i] == 0 for i in range(3)):
         return True
     elif all(tiles[i][2-i] == 0 for i in range(3)):
         return True
     return False
-
 def check_one(tiles):
     # Check vertical.
     for i in range(3):
@@ -321,7 +253,10 @@ def GameOver():
             pass
     except:
         pass
-    FirstPlayerLabel.after(10, GameOver)
+    try:
+        FirstPlayerLabel.after(10, GameOver)
+    except:
+        pass
 #Functions to trigger tile press
 
 def ButtonOne():
@@ -469,26 +404,23 @@ def ButtonNine():
 
 #To activate AI mode 
 def AgainstAiFunc():
-    global PlayerTwoNameText, NameLabel2, GlobalCounterForXandO, AiMode
+    global PlayerTwoNameText, NameLabel2, GlobalCounterForXandO, AiMode,PlayerTwoScoreMatrix,PlayerOneScoreMatrix
     RestTilesFunction()
     if (AiMode == 0):
+        PlayerTwoScoreMatrix=0
+        PlayerOneScoreMatrix=0
         showinfo("Message", """We are working hard to improve the AI, and we are confident that it will become more accurate and reliable over time. In the meantime, please let us know if you encounter any problems. We are always happy to help.\n Thank you""")
         AiMode = 1
         AgainstAi.config(text="Against human", bg="light green")
         PlayerTwoNameText = 'A.N.S.H.U'
-        try:
-            NameLabel2.config(text=PlayerTwoNameText)
-        except:
-            pass
-        PlayerTwoName.config(text=PlayerTwoNameText)
+        PlayerTwoName.config(text=f"{PlayerTwoNameText}  [{PlayerTwoScoreMatrix}]")
         IsAiHaveToMove()
     else:
         AiMode = 0
-        PlayerTwoNameText='PLAYER 2'
-        try:
-            NameLabel2.config(text=PlayerTwoNameText)
-        except:
-            pass
+        PlayerTwoScoreMatrix=0
+        PlayerOneScoreMatrix=0
+        PlayerTwoNameText=f'PLAYER 2'
+        PlayerTwoName.config(text=f"{PlayerTwoNameText}  [{PlayerTwoScoreMatrix}]")
         PlayerTwoName.config(text=PlayerTwoNameText)
         AgainstAi.config(text="Against A.I", bg="light green")
      
@@ -510,7 +442,10 @@ def IsAiHaveToMove():
             pass
     except Exception as e:
         print(f"Error:{e}")
-    AfterId = FirstPlayerLabel.after(10, IsAiHaveToMove)
+    try:
+        AfterId = FirstPlayerLabel.after(10, IsAiHaveToMove)
+    except:
+        pass
 #On tile press 
 def MakeAiMove(num):
     if (num == 1):
@@ -534,8 +469,7 @@ def MakeAiMove(num):
     else:
         print(f"input error in MakeAiMove function\nInput recived :{num}")
         
-#Funciton to check weather the AI is winning and to block opponent moves:
-
+#A.I move function
 def checkISwinning():
     if ((matrix[0][0] == 0 and matrix[0][1] == 0) and 3 in PreventRepetation):
         MakeAiMove(3)
@@ -662,16 +596,16 @@ def checkISwinning():
             MakeAiMove(random.choice(PreventRepetation))
       
 # PLAYER'S DETAIL BAR::::::::::
-PlayerNameFrame = Frame(win, bg='red', height=80, width=500)
+PlayerNameFrame = Frame(win, bg='#f99417', height=80, width=500)
 PlayerNameFrame.pack(fill='y', pady=10)
 
-PlayerOneName = Button(PlayerNameFrame, text='PLAYER 1',bg="#ffffff",
-                       height=5, width=40, command=AddName,cursor="")
+PlayerOneName = Button(PlayerNameFrame, text=f'PLAYER 1  [{PlayerOneScoreMatrix}]',bg="#ffffff",relief="flat",
+                       height=3, width=24, command=AddName,font="times 14")
 PlayerOneName.place(y=0)
 
-PlayerTwoName = Button(PlayerNameFrame, text='PLAYER 2',
-                       height=5, width=40, command=AddName,bg="#ffffff")
-PlayerTwoName.place(x=250)
+PlayerTwoName = Button(PlayerNameFrame, text=f'PLAYER 2  [{PlayerOneScoreMatrix}]',bg="#ffffff",relief="flat",
+                       height=3, width=23, command=AddName,font="times 14")
+PlayerTwoName.place(x=260)
 
 
 # MAIN GAME SPACE::::::::::::::
@@ -722,6 +656,9 @@ Button9 = Button(MainGameFrame, bg='white', width=5, height=1,cursor="circle",
 Button9.place(x=300, y=225)
 
 
+
+
+
 # Check if tiles are full
 def CheckTilesAreFull():
     try:
@@ -730,8 +667,10 @@ def CheckTilesAreFull():
             RestTilesFunction()
     except Exception as e:
         print(f"Error :{e}")
-    MainGameFrame.after(300, CheckTilesAreFull)
-
+    try:
+        MainGameFrame.after(300, CheckTilesAreFull)
+    except:
+        pass
 
 # MAIN FUNCTION
 FirstToStartGame()
