@@ -1,9 +1,10 @@
-from tkinter import *
+from tkinter import * # type: ignore
 import random
 from random import randint
 from pygame import mixer
 from tkinter.messagebox import showinfo
 from time import sleep
+import  speechModule  
 # MAIN WINDOW DECLARATION::::::
 win = Tk()
 win.geometry("500x600")
@@ -11,7 +12,10 @@ win.resizable(False, False)
 win.title("TIC TAK TOE")
 win.config(bg='#f99417')
 # GLOBAL VARIABLES:::
-win.iconbitmap("mains\\icon.ico")
+try:
+    win.iconbitmap("mains\\icon.ico")
+except:
+    showinfo("Error", "Icon not found")
 mixer.init()
 mixer.music.load("mains\\bgm.mp3")
 mixer.music.play(-1)
@@ -20,7 +24,7 @@ global FinalNum, FirstPlayerFinal, FirstPlayerLabel, RandomNumThree, GlobalCount
 global RestTiles, MuteBgm, MusicCounter, matrix, songCounter, PlayerOneScoreMatrix, PlayerTwoScoreMatrix, AgainstAi
 global NameLabel1, NameLabel2, ScoreScreen1, ScoreScreen2, TotalCounterSpace, ScoreCounterUpdater, AfterId
 global MakeAiMove, checkISwinning, AiMode, PreventRepetation
-global counter, listcounter
+global counter, listcounter,PlayerOnePrediction, PlayerTwoPrediction
 counterxyz = 0
 AiMode = 0
 PreventRepetation = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -40,6 +44,8 @@ matrix = [
 ]
 PlayerOneScoreMatrix = 0
 PlayerTwoScoreMatrix = 0
+PlayerOnePrediction = 50
+PlayerTwoPrediction = 50
 if (MusicCounter == 0):
     mixer.music.play(-1)
 # FUNCTION::::::
@@ -146,7 +152,7 @@ def MuteUnMute():
 # RESET BUTTON FUNCTION:
 
 def RestTilesFunction():
-    global matrix, GlobalCounterForXandO, songCounter, MusicCounter, PlayerTwoScoreMatrix, PlayerOneScoreMatrix,PlayerOneName
+    global matrix, GlobalCounterForXandO, songCounter, MusicCounter, PlayerTwoScoreMatrix, PlayerOneScoreMatrix,PlayerOneName, PlayerOnePrediction, PlayerTwoPrediction
     global  PreventRepetation
     if (check_zero(matrix)):
             PlayerTwoScoreMatrix=PlayerTwoScoreMatrix+1
@@ -173,8 +179,6 @@ def RestTilesFunction():
     Button7["state"] = "normal"
     Button8["state"] = "normal"
     Button9["state"] = "normal"
-    FirstToStartGame()
-    FrameConfig()
     PreventRepetation = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     matrix = [[4, 5, 6], [4, 5, 6], [4, 5, 6]]
     songCounter = 0
@@ -221,11 +225,20 @@ def check_one(tiles):
 #Check if game is finshed or not::::
 
 def GameOver():
-    global songCounter, AfterId
+    global songCounter, AfterId,PlayerOnePrediction,PlayerTwoPrediction
     try:
         if (check_zero(matrix) or check_one(matrix)):
+            if (check_zero(matrix)):
+                nameToSpeak=PlayerTwoNameText
+                FirstPlayerLabel.config(
+                    text=f"{PlayerTwoNameText} won the game.")
+            elif (check_one(matrix)):
+                nameToSpeak=PlayerOneNameText
+                FirstPlayerLabel.config(
+                    text=f"{PlayerOneNameText} won the game.")
             if (songCounter < 1):
                 if (MusicCounter == 0):
+                    speechModule.speak(f'{nameToSpeak}')
                     mixer.music.load("mains\\winbgm.mp3")
                     mixer.music.play(-1)
             else:
@@ -240,14 +253,6 @@ def GameOver():
             Button7["state"] = DISABLED
             Button8["state"] = DISABLED
             Button9["state"] = DISABLED
-            if (check_zero(matrix)):
-                FirstPlayerLabel.config(
-                    text=f"{PlayerTwoNameText} won the game.")
-            elif (check_one(matrix)):
-                FirstPlayerLabel.config(
-                    text=f"{PlayerOneNameText} won the game.")
-            else:
-                pass
             win.after_cancel(AfterId)
         else:
             pass
@@ -273,7 +278,7 @@ def ButtonOne():
         Button1.config(text="O", bg="red")
         Button1["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
-
+    CalculateWinPrediction()
 
 def ButtonTwo():
     global GlobalCounterForXandO, tiles2, PreventRepetation
@@ -289,6 +294,7 @@ def ButtonTwo():
         Button2.config(text="O", bg="red")
         Button2["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+    CalculateWinPrediction()
 
 
 def ButtonThree():
@@ -305,7 +311,8 @@ def ButtonThree():
         Button3.config(text="O", bg="red")
         Button3["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
-
+    CalculateWinPrediction()
+    
 
 def ButtonFour():
     global GlobalCounterForXandO, tiles4, PreventRepetation
@@ -321,6 +328,8 @@ def ButtonFour():
         Button4.config(text="O", bg="red")
         Button4["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+    CalculateWinPrediction()
+   
 
 
 def ButtonFive():
@@ -337,6 +346,8 @@ def ButtonFive():
         Button5.config(text="O", bg="red")
         Button5["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+    CalculateWinPrediction()
+   
 
 
 def ButtonSix():
@@ -353,7 +364,8 @@ def ButtonSix():
         Button6.config(text="O", bg="red")
         Button6["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
-
+    CalculateWinPrediction()
+   
 
 def ButtonSeven():
     global GlobalCounterForXandO, tiles7, PreventRepetation
@@ -369,7 +381,8 @@ def ButtonSeven():
         Button7.config(text="O", bg="red")
         Button7["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
-
+    CalculateWinPrediction()
+  
 
 def ButtonEight():
     global GlobalCounterForXandO, tiles8, PreventRepetation
@@ -385,6 +398,8 @@ def ButtonEight():
         Button8.config(text="O", bg="red")
         Button8["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+    CalculateWinPrediction()
+  
 
 
 def ButtonNine():
@@ -401,6 +416,8 @@ def ButtonNine():
         Button9.config(text="O", bg="red")
         Button9["state"] = DISABLED
     changePlate(GlobalCounterForXandO)
+    CalculateWinPrediction()
+    
 
 #To activate AI mode 
 def AgainstAiFunc():
@@ -446,6 +463,7 @@ def IsAiHaveToMove():
         AfterId = FirstPlayerLabel.after(10, IsAiHaveToMove)
     except:
         pass
+
 #On tile press 
 def MakeAiMove(num):
     if (num == 1):
@@ -594,7 +612,100 @@ def checkISwinning():
             MakeAiMove(3)
         else:
             MakeAiMove(random.choice(PreventRepetation))
-      
+#WIN PREDICTION CALC FUNCTION
+def evaluate_board(board):
+    # Winning patterns
+    winning_patterns = [
+        [(0, 0), (0, 1), (0, 2)],
+        [(1, 0), (1, 1), (1, 2)],
+        [(2, 0), (2, 1), (2, 2)],
+        [(0, 0), (1, 0), (2, 0)],
+        [(0, 1), (1, 1), (2, 1)],
+        [(0, 2), (1, 2), (2, 2)],
+        [(0, 0), (1, 1), (2, 2)],
+        [(0, 2), (1, 1), (2, 0)]
+    ]
+
+    for pattern in winning_patterns:
+        values = [board[x][y] for x, y in pattern]
+
+        if values == [1, 1, 1]:  # Player 1 wins
+            return 10
+        elif values == [0, 0, 0]:  # Player 2 wins
+            return -10
+    return 0  # No win yet
+def minimax(board, depth, is_maximizing):
+    score = evaluate_board(board)
+
+    # If a player has won, return score
+    if score == 10:
+        return score - depth  # Prioritize faster wins
+    if score == -10:
+        return score + depth  # Prioritize delaying loss
+
+    # If board is full, return 0 (Draw)
+    if not any(4 in row or 5 in row or 6 in row for row in board):
+        return 0
+
+    if is_maximizing:  # Maximizing for Player 1 (X)
+        best = -1000
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] not in [0, 1]:  # Empty cell
+                    board[i][j] = 1  # Try X
+                    best = max(best, minimax(board, depth + 1, False))
+                    board[i][j] = 4  # Undo move
+        return best
+
+    else:  # Minimizing for Player 2 (O)
+        best = 1000
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] not in [0, 1]:  # Empty cell
+                    board[i][j] = 0  # Try O
+                    best = min(best, minimax(board, depth + 1, True))
+                    board[i][j] = 4  # Undo move
+        return best
+def CalculateWinPrediction():
+    global PlayerOnePrediction, PlayerTwoPrediction
+
+    player_one_wins = 0
+    player_two_wins = 0
+    total_simulations = 0
+
+    for i in range(3):
+        for j in range(3):
+            if matrix[i][j] not in [0, 1]:  # Empty cell
+                # Try Player 1 (X) move
+                matrix[i][j] = 1
+                if minimax(matrix, 0, False) > 0:
+                    player_one_wins += 1
+                matrix[i][j] = 4  # Undo move
+
+                # Try Player 2 (O) move
+                matrix[i][j] = 0
+                if minimax(matrix, 0, True) < 0:
+                    player_two_wins += 1
+                matrix[i][j] = 4  # Undo move
+
+                total_simulations += 2
+
+    # Calculate probabilities
+    if total_simulations > 0:
+        PlayerOnePrediction = (player_one_wins / total_simulations) * 100
+        PlayerTwoPrediction = (player_two_wins / total_simulations) * 100
+    else:
+        PlayerOnePrediction = 50
+        PlayerTwoPrediction = 50
+
+    UpdatePredictionDisplay()
+
+#UPDATE UI BASES UPON THE PREDICTION
+def UpdatePredictionDisplay():
+    predictionLabel.config(
+        text=f"{PlayerOneNameText}: {PlayerOnePrediction:.1f}%    |     {PlayerTwoNameText}: {PlayerTwoPrediction:.1f}%"
+    )
+     
 # PLAYER'S DETAIL BAR::::::::::
 PlayerNameFrame = Frame(win, bg='#f99417', height=80, width=500)
 PlayerNameFrame.pack(fill='y', pady=10)
@@ -606,7 +717,6 @@ PlayerOneName.place(y=0)
 PlayerTwoName = Button(PlayerNameFrame, text=f'PLAYER 2  [{PlayerOneScoreMatrix}]',bg="#ffffff",relief="flat",
                        height=3, width=23, command=AddName,font="times 14")
 PlayerTwoName.place(x=260)
-
 
 # MAIN GAME SPACE::::::::::::::
 FirstPlayerLabel = Label(win, text='', bg='white', height=2, width=72)
@@ -622,6 +732,9 @@ AgainstAi = Button(win, text="Against A.I", width=15,
 AgainstAi.place(x=200, y=550)
 MuteBgm = Button(win, text="MUTE", bg="#42f5b3", width=15, command=MuteUnMute)
 MuteBgm.place(x=350, y=550)
+#Win Prediction Area
+predictionLabel=Label(win,text="Win Prediction",bg='white', width=71, height=1)
+predictionLabel.place(x=0, y=140)
 
 
 # TILES BUTTON
